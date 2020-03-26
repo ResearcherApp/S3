@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 
 /// Available access control list values for "x-amz-acl" header as specified in AWS documentation
