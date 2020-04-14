@@ -20,7 +20,7 @@ public func routes(_ router: Router) throws {
         return try s3.create(bucket: "api-created-bucket", region: .euCentral1, on: req).map(to: String.self) {
             return ":)"
             }.catchMap({ (error) -> (String) in
-                if let error = error.s3ErroMessage() {
+                if let error = error.s3ErrorMessage() {
                     return error.message
                 }
                 return ":("
@@ -34,7 +34,7 @@ public func routes(_ router: Router) throws {
         return try s3.delete(bucket: "api-created-bucket", region: .euCentral1, on: req).map(to: String.self) {
             return ":)"
             }.catchMap({ (error) -> (String) in
-                if let error = error.s3ErroMessage() {
+                if let error = error.s3ErrorMessage() {
                     return error.message
                 }
                 return ":("
@@ -46,7 +46,7 @@ public func routes(_ router: Router) throws {
     router.get("files")  { req -> Future<BucketResults> in
         let s3 = try req.makeS3Client()
       return try s3.list(bucket: "booststore", region: .usEast1, queryItems: [], headers: [:], on: req).catchMap({ (error) -> (BucketResults) in
-            if let error = error.s3ErroMessage() {
+            if let error = error.s3ErrorMessage() {
                 print(error.message)
             }
             throw error
@@ -96,7 +96,7 @@ public func routes(_ router: Router) throws {
                             let json = try JSONEncoder().encode(infoResponse)
                             return String(data: json, encoding: .utf8) ?? "Unknown content!"
                             }.catchMap({ error -> (String) in
-                                if let error = error.s3ErroMessage() {
+                                if let error = error.s3ErrorMessage() {
                                     return error.message
                                 }
                                 return ":("
@@ -105,7 +105,7 @@ public func routes(_ router: Router) throws {
                     }
                 }
             }.catchMap({ error -> (String) in
-                if let error = error.s3ErroMessage() {
+                if let error = error.s3ErrorMessage() {
                     return error.message
                 }
                 return ":("
