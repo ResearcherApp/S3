@@ -45,7 +45,7 @@ public func routes(_ router: Router) throws {
     // Delete bucket
     router.get("files")  { req -> Future<BucketResults> in
         let s3 = try req.makeS3Client()
-        return try s3.list(bucket: "booststore", region: .usEast1, headers: [:], on: req).catchMap({ (error) -> (BucketResults) in
+      return try s3.list(bucket: "booststore", region: .usEast1, queryItems: [], headers: [:], on: req).catchMap({ (error) -> (BucketResults) in
             if let error = error.s3ErroMessage() {
                 print(error.message)
             }

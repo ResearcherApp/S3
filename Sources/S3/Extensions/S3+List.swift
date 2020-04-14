@@ -15,7 +15,7 @@ import FoundationNetworking
 extension S3 {
     
     /// Get list of objects
-    public func list(bucket: String, region: Region? = nil, headers: [String: String], on container: Container) throws -> Future<BucketResults> {
+  public func list(bucket: String, region: Region? = nil, queryItems: [URLQueryItem], headers: [String: String], on container: Container) throws -> Future<BucketResults> {
         let region = region ?? signer.config.region
         guard let baseUrl = URL(string: region.hostUrlString(bucket: bucket)), let host = baseUrl.host,
             var components = URLComponents(string: baseUrl.absoluteString) else {
@@ -24,6 +24,7 @@ extension S3 {
         components.queryItems = [
             URLQueryItem(name: "list-type", value: "2")
         ]
+    components.queryItems?.append(contentsOf: queryItems)
         guard let url = components.url else {
             throw S3.Error.invalidUrl
         }
@@ -38,7 +39,7 @@ extension S3 {
     
     /// Get list of objects
     public func list(bucket: String, region: Region? = nil, on container: Container) throws -> Future<BucketResults> {
-        return try list(bucket: bucket, region: region, headers: [:], on: container)
+      return try list(bucket: bucket, region: region, queryItems: [], headers: [:], on: container)
     }
     
 }
